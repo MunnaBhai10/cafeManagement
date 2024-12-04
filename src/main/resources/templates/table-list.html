@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafe Table List</title>
+	<link rel="stylesheet" href="/css/table-list.css">
+
+</head>
+<body>
+    <h2>Cafe Table List</h2>
+    <a href="/tables/new">Create New Table</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Table Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="table : ${tables}">
+                <td th:text="${table.tableName}"></td>
+                <td th:text="${table.status}"></td>
+                <td>
+                    <a th:href="@{/tables/edit/{id}(id=${table.tableId})}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

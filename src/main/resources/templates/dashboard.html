@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div class="dashboard-stats">
+        <div>Total Users: <span th:text="${totalUsers}"></span></div>
+        <div>Total Orders: <span th:text="${totalOrders}"></span></div>
+        <div>Active Tables: <span th:text="${activeTables}"></span></div>
+        <div>Pending Bills: <span th:text="${pendingBills}"></span></div>
+    </div>
+    <a href="/orders">Manage Orders</a>
+    <a href="/bills">Manage Bills</a>
+    <a href="/orderdetails">View Order Details</a>
+</body>
+</html>

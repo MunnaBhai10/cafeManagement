@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create/Edit Order</title>
+	<link rel="stylesheet" href="/css/order-form.css">
+
+</head>
+<body>
+    <h2 th:text="${order.orderId == null ? 'Create Order' : 'Edit Order'}"></h2>
+    <form th:action="@{/orders/save}" th:object="${order}" method="post">
+        <div>
+            <label for="status">Status:</label>
+            <select th:field="*{status}" id="status">
+                <option value="PENDING">Pending</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELED">Canceled</option>
+            </select>
+        </div>
+        <div>
+            <label for="table">Table:</label>
+            <select th:field="*{table.tableId}" id="table">
+                <option th:each="table : ${tables}" th:value="${table.tableId}" th:text="${table.tableName}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="user">Customer:</label>
+            <select th:field="*{user.userId}" id="user">
+                <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.fullName}"></option>
+            </select>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

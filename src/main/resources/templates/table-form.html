@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create/Edit Cafe Table</title>
+	<link rel="stylesheet" href="/css/table-form.css">
+
+</head>
+<body>
+    <h2 th:text="${table.tableId == null ? 'Create Cafe Table' : 'Edit Cafe Table'}"></h2>
+    <form th:action="@{/tables/save}" th:object="${table}" method="post">
+        <div>
+            <label for="tableName">Table Name:</label>
+            <input type="text" th:field="*{tableName}" id="tableName"/>
+        </div>
+        <div>
+            <label for="status">Status:</label>
+            <select th:field="*{status}" id="status">
+                <option value="AVAILABLE">Available</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="RESERVED">Reserved</option>
+            </select>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

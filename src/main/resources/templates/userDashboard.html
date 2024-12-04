@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/userDashboard.css}">
+</head>
+<body>
+    <h1>Welcome to the User Dashboard</h1>
+
+    <h2>Available Dining Tables</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Table Name</th>
+                <th>Seating Capacity</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="table : ${diningTables}">
+                <td th:text="${table.tableName}">Table Name</td>
+                <td th:text="${table.seatingCapacity}">Seating Capacity</td>
+                <td th:text="${table.isOccupied ? 'Occupied' : 'Available'}">Status</td>
+                <td>
+                    <a th:href="@{/orders/{diningTableId}(diningTableId=${table.diningTableId})}" 
+                       th:if="${!table.isOccupied}">Place Order</a>
+                    <span th:if="${table.isOccupied}">Unavailable</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

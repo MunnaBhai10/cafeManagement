@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Management System</title>
+   
+	<style>
+		body {
+		    font-family: 'Arial', sans-serif;
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		}
+
+		header {
+		    background-color: #4CAF50;
+		    color: white;
+		    padding: 1em 0;
+		    position: sticky;
+		    top: 0;
+		    z-index: 1000;
+		}
+
+		.navbar {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    padding: 0 2em;
+		}
+
+		.nav-links {
+		    list-style: none;
+		    display: flex;
+		    gap: 1em;
+		}
+
+		.nav-links li a {
+		    color: white;
+		    text-decoration: none;
+		    font-weight: bold;
+		}
+
+		.nav-links li a:hover {
+		    text-decoration: underline;
+		}
+
+		.hero {
+		    text-align: center;
+		    padding: 4em 2em;
+		    background: url('cafe-background.jpg') no-repeat center center/cover;
+		    color: white;
+		}
+
+		.hero h1 {
+		    font-size: 3em;
+			color: rgb(0, 0, 0);
+		}
+
+		.hero p {
+		    margin: 1em 0;
+			color: rgb(0, 0, 0);
+		}
+
+		.btn {
+		    background-color: #4CAF50;
+		    color: white;
+		    padding: 0.8em 1.5em;
+		    text-decoration: none;
+		    border-radius: 5px;
+		    font-size: 1em;
+		}
+
+		.btn:hover {
+		    background-color: #45a049;
+		}
+
+		.about-section, .features-section, .contact-section {
+		    padding: 2em;
+		    text-align: center;
+		}
+
+		footer {
+		    background-color: #333;
+		    color: white;
+		    text-align: center;
+		    padding: 1em 0;
+		}
+
+		footer p {
+		    margin: 0;
+		}
+
+	</style>
+	
+	
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Cafe Management</div>
+            <ul class="nav-links">
+                <li><a th:href="@{/about}">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to the Cafe Management System</h1>
+            <p>Streamline dining table management, enhance customer experiences, and simplify billing all in one platform.</p>
+            <a href="/get-started" class="btn">Get Started</a>
+        </section>
+
+        <section id="about" class="about-section">
+            <h2>About Our System</h2>
+            <p>The Cafe Management System is designed to help admins manage dining tables, process orders, and generate bills efficiently while providing an intuitive interface for customers to place orders seamlessly.</p>
+        </section>
+
+        <section id="features" class="features-section">
+            <h2>Key Features</h2>
+            <ul>
+                <li>Admin-friendly dining table management</li>
+                <li>Real-time order tracking</li>
+                <li>Effortless billing and reporting</li>
+                <li>User-friendly customer interface for placing orders</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <section id="contact" class="contact-section">
+            <h2>Contact Us</h2>
+            <p>Email: support@cafemanagement.com</p>
+            <p>Phone: +123-456-7890</p>
+        </section>
+        <p>&copy; 2024 Cafe Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

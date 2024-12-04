@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <h1>All Bills</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Bill ID</th>
+                <th>Total Price</th>
+                <th>Payment Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="bill : ${bills}">
+                <td th:text="${bill.billId}"></td>
+                <td th:text="${bill.totalPrice}"></td>
+                <td th:text="${bill.paymentStatus}"></td>
+                <td>
+                    <a th:href="@{/bills/{billId}(billId=${bill.billId})}">View</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>
