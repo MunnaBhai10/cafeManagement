@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Menu</h1>
+
+    <!-- Order Form -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Place Your Order</h2>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/order/by/customer/{userId}(userId=${user.userId})}" method="post">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="menuItem : ${menuItems}">
+                            <td th:text="${menuItem.itemId}"></td>
+                            <td th:text="${menuItem.itemName}"></td>
+                            <td th:text="${menuItem.itemPrice} + ' $'"></td>
+                            <td>
+                                <!-- Pass MenuItem ID and quantity -->
+                                <input type="hidden" name="menuItemIds" th:value="${menuItem.itemId}">
+                                <input type="number" class="form-control" name="quantities" min="0" value="0">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success mt-3">Submit Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -4,11 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.example.cafe.enums.PaymentMethod;
-import com.example.cafe.enums.PaymentStatus;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +14,8 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Bills {
 	
+
+
 @Id
 @GeneratedValue(strategy=GenerationType.IDENTITY)
 private  Integer billId;
@@ -32,13 +30,15 @@ private LocalDate billDate;
 @JoinColumn(name="Order_id",referencedColumnName="orderId")
 private Orders order;
 
-@Enumerated
-private PaymentStatus paymentStatus;
-
-@Enumerated
-private PaymentMethod paymentMethod;
 
 
+public Orders getOrder() {
+	return order;
+}
+
+public void setOrder(Orders order) {
+	this.order = order;
+}
 
 
 public Integer getBillId() {
@@ -73,20 +73,5 @@ public void setOrderId(Orders orderId) {
 	order = orderId;
 }
 
-public PaymentStatus getPaymentStatus() {
-	return paymentStatus;
-}
-
-public void setPaymentStatus(PaymentStatus paymentStatus) {
-	this.paymentStatus = paymentStatus;
-}
-
-public PaymentMethod getPaymentMethod() {
-	return paymentMethod;
-}
-
-public void setPaymentMethod(PaymentMethod paymentMethod) {
-	this.paymentMethod = paymentMethod;
-}
 
 }

@@ -1,31 +1,54 @@
 package com.example.cafe.service;
 
-import com.example.cafe.entity.Users;
-import com.example.cafe.repository.UserRepository;
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.cafe.entity.Users;
+import com.example.cafe.repository.UsersRepository;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UsersRepository userRepository; 
+	
 
-    public Users createUser(Users user) {
-        return userRepository.save(user);
-    }
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	public Users addNewUser(Users userdto) throws Exception {
+		
+		if(userdto==null)throw new Exception("usern is empty cant register");
+		
+		Users user = new Users();
+		user.setEmail(userdto.getEmail());
+		user.setFullName(userdto.getFullName());
+		user.setRole(userdto.getRole());
+		user.setUsername(userdto.getFullName());
+		user.setPassword(passwordEncoder.encode(userdto.getPassword()));
+		
+		return userRepository.save(user);
+	}
 
-    public List<Users> getAllUsers() {
-        return userRepository.findAll();
-    }
 
-    public Users getUserById(Integer userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
+	public Users findByUserEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
+	 public Users authenticate(String username, String password) {
+	        // Fetch the user by username from the database
+	        Users user = userRepository.findByUsername(username);
 
-    public Users findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
-    }
+	        // Check if user exists and the password matches
+	        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+	            return user;  // Return the authenticated user
+	        }
+
+	        // If authentication fails, return null
+	        return null;
+	    }
+
 }

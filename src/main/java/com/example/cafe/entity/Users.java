@@ -1,17 +1,21 @@
 package com.example.cafe.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.example.cafe.enums.Role;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -20,20 +24,25 @@ public class Users {
 @GeneratedValue(strategy= GenerationType.IDENTITY)
 private Integer userId;
 
-//@Column(unique= true)
-private String userName;
-
 private String fullName;
 
-//@Column(unique= true)
+private String username;
+
 private String email;
+
+
 private String password;
 
 @CreationTimestamp
 private LocalDate createdAt;
 
-@Enumerated
+@Enumerated(EnumType.STRING)
 private Role role;
+
+@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Orders> orders = new ArrayList<>();
+
+
 
 public Integer getUserId() {
 	return userId;
@@ -43,13 +52,6 @@ public void setUserId(Integer userId) {
 	this.userId = userId;
 }
 
-public String getUserName() {
-	return userName;
-}
-
-public void setUserName(String userName) {
-	this.userName = userName;
-}
 
 public LocalDate getCreatedAt() {
 	return createdAt;
@@ -90,5 +92,13 @@ public String getPassword() {
 
 public void setPassword(String password) {
 	this.password = password;
+}
+
+public String getUsername() {
+	return username;
+}
+
+public void setUsername(String username) {
+	this.username = username;
 }
 }

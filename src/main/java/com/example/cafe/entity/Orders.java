@@ -1,79 +1,100 @@
 package com.example.cafe.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.example.cafe.enums.OrderStatus;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
 @Entity
-@Table(name="orders")
+@Table(name="orders_tbl")
 public class Orders {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Integer orderId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) 
+    private Long orderId;
 
-@CreationTimestamp
-private LocalDateTime orderTime;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-@Enumerated
-private OrderStatus status;
+    private Double totalAmount;
+    private LocalDateTime orderDate;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user;
 
-@ManyToOne
-@JoinColumn(name= "table_id", referencedColumnName = "tableId")
-private CafeTables table;
+	@ManyToOne
+    @JoinColumn(name = "table_id")
+    private CafeTables table; // Optional: associate order with a table
 
-@ManyToOne
-@JoinColumn(name= "customer_id", referencedColumnName = "userId")
-private Users user;
 
-public Integer getOrderId() {
-	return orderId;
-}
+    public Long getOrderId() {
+		return orderId;
+	}
 
-public void setOrderId(Integer orderId) {
-	this.orderId = orderId;
-}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 
-public LocalDateTime getOrderTime() {
-	return orderTime;
-}
+	public CafeTables getTable() {
+		return table;
+	}
 
-public void setOrderTime(LocalDateTime orderTime) {
-	this.orderTime = orderTime;
-}
+	public void setTable(CafeTables table) {
+		this.table = table;
+	}
+	
+	public Long getId() {
+		return orderId;
+	}
 
-public OrderStatus getStatus() {
-	return status;
-}
+	public void setId(Long orderId) {
+		this.orderId = orderId;
+	}
 
-public void setStatus(OrderStatus status) {
-	this.status = status;
-}
+	public Users getUser() {
+		return user;
+	}
 
-public CafeTables getTable() {
-	return table;
-}
+	public void setUser(Users user) {
+		this.user = user;
+	}
+     
 
-public void setTable(CafeTables table) {
-	this.table = table;
-}
+	public List<OrderItem> getOrderItems() {
+		return orderItems;
+	}
 
-public Users getUser() {
-	return user;
-}
+	public void setOrderItems(List<OrderItem> orderItems) {
+		this.orderItems = orderItems;
+	}
 
-public void setUser(Users user) {
-	this.user = user;
-}
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
 
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public LocalDateTime getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(LocalDateTime orderDate) {
+		this.orderDate = orderDate;
+	}
+
+    
+    
+    // Getters and Setters
 }
