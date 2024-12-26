@@ -1,11 +1,12 @@
 package com.example.cafe.service;
 
-import javax.naming.AuthenticationException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.cafe.DTO.UserDto;
 import com.example.cafe.entity.Users;
 import com.example.cafe.repository.UsersRepository;
 
@@ -15,28 +16,34 @@ public class UserService {
 	@Autowired
 	private UsersRepository userRepository; 
 	
-
-	
 	@Autowired
-	PasswordEncoder passwordEncoder;
-	public Users addNewUser(Users userdto) throws Exception {
-		
-		if(userdto==null)throw new Exception("usern is empty cant register");
-		
-		Users user = new Users();
-		user.setEmail(userdto.getEmail());
-		user.setFullName(userdto.getFullName());
-		user.setRole(userdto.getRole());
-		user.setUsername(userdto.getFullName());
-		user.setPassword(passwordEncoder.encode(userdto.getPassword()));
-		
-		return userRepository.save(user);
-	}
+	private PasswordEncoder passwordEncoder;
+
+    public Users addNewUser(UserDto userDto) throws Exception {
+        if (userDto == null) {
+            throw new Exception("User is empty. Cannot register.");
+        }
+
+        // Check if email already exists
+        if (emailExists(userDto.getEmail())) {
+            throw new Exception("Email already exists.");
+        }
+
+        Users user = new Users();
+        user.setEmail(userDto.getEmail());
+        user.setRole(userDto.getRole());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        
+        return userRepository.save(user);
+    }
 
 
-	public Users findByUserEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
+	public boolean emailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+	
+
 	
 	 public Users authenticate(String username, String password) {
 	        // Fetch the user by username from the database
@@ -50,5 +57,23 @@ public class UserService {
 	        // If authentication fails, return null
 	        return null;
 	    }
+
+
+	 public List<Users> getAllUsers() {
+	        return userRepository.findAll(); // Retrieve all users
+	    }
+
+
+	 public void deleteUserById(Long userId) {
+	        if (!userRepository.existsById(userId)) {
+	            throw new RuntimeException("User with ID " + userId + " does not exist.");
+	        }
+	        userRepository.deleteById(userId); // Delete the user
+	    }
+
+
+	public Users getUserById(Long id) {
+		return userRepository.findByUserId(id); 
+	}
 
 }

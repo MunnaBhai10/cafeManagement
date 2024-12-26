@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: cafemanagement-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: cafemanagement
+      POSTGRES_PASSWORD: cafemanagement
+      POSTGRES_DB: cafemanagement  # This automatically creates the database
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always  # Optional: ensure the database starts if it stops
+
+  app:
+    image: cafemanagement:latest
+    container_name: cafemanagement-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cafemanagement
+      SPRING_DATASOURCE_USERNAME: cafemanagement
+      SPRING_DATASOURCE_PASSWORD: cafemanagement
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    depends_on:
+      - db
+    restart: always  # Optional: ensure the app starts after the db
+
+volumes:
+  db_data:

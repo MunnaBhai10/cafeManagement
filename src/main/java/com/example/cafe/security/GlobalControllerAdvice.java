@@ -1,5 +1,7 @@
 package com.example.cafe.security;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,17 +29,16 @@ public class GlobalControllerAdvice {
             System.out.println("Logged in user email: " + email);
             
             // Fetch the full user entity from the database using the email
-            Users user = usersRepository.findByEmail(email);
-            
-            if (user != null) {
-                System.out.println("Retrieved user from database: " + user.getEmail());
-                return user;  // Return the user object to be used in all controllers
+            Optional<Users> user = usersRepository.findByEmail(email);
+            if (user.isPresent()) {
+                return user.get();  // Return the user object if found
             } else {
+                // If no user is found, return a null or log this case
                 System.out.println("User not found in database.");
             }
         }
         
         // If the user is not logged in or doesn't exist in the database, return null or handle as needed
-        return null;
+        return null;  // This is a default behavior if no user is authenticated or found
     }
 }

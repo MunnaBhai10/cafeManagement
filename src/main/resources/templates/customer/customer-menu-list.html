@@ -14,8 +14,12 @@
             <h2>Place Your Order</h2>
         </div>
         <div class="card-body">
-            <form th:action="@{/order/by/customer/{userId}(userId=${user.userId})}" method="post">
-                <table class="table table-bordered">
+            <form th:action="@{/customer/order/by/{userId}(userId=${user.userId})}" method="post">
+				<div th:if="${errorMessage}" class="alert alert-danger">
+				    <p th:text="${errorMessage}"></p>
+				</div>
+
+				<table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Item ID</th>
@@ -35,8 +39,10 @@
                                 <input type="number" class="form-control" name="quantities" min="0" value="0">
                             </td>
                         </tr>
+						
                     </tbody>
                 </table>
+				
                 <button type="submit" class="btn btn-success mt-3">Submit Order</button>
             </form>
         </div>

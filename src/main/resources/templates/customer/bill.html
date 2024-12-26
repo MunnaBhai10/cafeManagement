@@ -1,47 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Order Bill</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file for styling -->
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center">Your Order Bill</h1>
+    <h1>Order Bill</h1>
 
-    <div class="card">
-        <div class="card-header">
-            <h2>Order Summary</h2>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-				<tbody>
-				          <tr th:each="menuItem : ${menuItems}">
-				              <td th:text="${menuItem.itemId}"></td>
-				              <td th:text="${menuItem.itemName}"></td>
-				              <td th:text="${menuItem.itemPrice} + ' $'"></td>
-				              <td>
-				                  <input type="hidden" name="orderItemDTOs[__${menuItem.itemId}__].menuItemId" th:value="${menuItem.itemId}">
-				                  <input type="number" class="form-control" name="orderItemDTOs[__${menuItem.itemId}__].quantity" min="0" value="0">
-				              </td>
-				          </tr>
-				      </tbody>
-            </table>
-            <hr>
-            <div class="text-right">
-                <h4>Total Amount: <span th:text="${order.totalAmount} + ' $'"></span></h4>
-            </div>
-			
-			<a th:href="@{customer/pay/bill}">Payment Option</a>
-        </div>
+    <!-- Flash Messages -->
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
     </div>
-</div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+
+	
+	<!-- If the order is completed -->
+	<div th:if="${order.orderStatus == 'Completed'}" class="alert alert-success">
+	    <p>Thank you! Your order has been successfully completed.</p>
+	</div>
+
+
+    <!-- Order Items Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${orderItems}">
+                <td th:text="${item.itemName}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${item.itemPrice}"></td>
+                <td th:text="${item.quantity * item.itemPrice}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Conditional Actions Based on Order Status -->
+    <div class="order-actions">
+        <!-- If payment is not completed -->
+        <div th:if="${order.paymentStatus != 'paid' && order.orderStatus != 'not-recieved' }" class="alert alert-warning">
+            <p>Your order will be processed after payment is completed.</p>
+        </div>
+
+		<!-- If payment is completed but order is being prepared -->
+		<div th:if="${order.paymentStatus == 'paid' && order.orderStatus == 'not-recieved'}" class="alert alert-info">
+		    <p>Admin will review your order please wait a moment</p>
+		</div>
+        <!-- If payment is completed but order is being prepared -->
+        <div th:if="${order.paymentStatus == 'paid' && order.orderStatus == 'order-sent'}" class="alert alert-info">
+            <p>Please wait for a moment, your order is on the way.</p>
+        </div>
+
+
+
+
+ 
+		<!-- Order Details -->
+		   <div class="order-details">
+		       <p>Order ID: <span th:text="${order.orderId}"></span></p>
+		       <p>Total Amount: <span th:text="${order.totalAmount}"></span></p>
+		       <p>Order Status: <span th:text="${order.orderStatus}"></span></p>
+		       <p>Payment Status: <span th:text="${order.paymentStatus}"></span></p>
+		   </div>
+		   
+		   <!-- If the order is sent, show 'Mark as Received' button -->
+		   <form th:if="${order.orderStatus == 'order-sent'}"
+		         th:action="@{'/customer/order/' + ${order.orderId} + '/received'}" method="post"
+		         onsubmit="return confirm('Are you sure you want to mark this order as received?');">
+		       <button type="submit">Mark as Received</button>
+		   </form>
+
+		   
+		   <!-- Cancel Order Button (shown if order is still being prepared) -->
+		    <form th:if="${order.orderStatus == 'pending'}"
+		          th:action="@{/customer/order/cancel/{orderId}(orderId=${order.orderId})}" method="post">
+		        <button type="submit" class="btn btn-danger">Cancel Order</button>
+		    </form>
+
+        <!-- Pay Button (shown if payment is not done) -->
+        <form th:if="${order.paymentStatus != 'paid'}"
+              th:action="@{/customer/pay/order/{orderId}(orderId=${order.orderId})}" method="post">
+            <button type="submit" class="btn btn-primary">Pay</button>
+        </form>
+		<!-- if order is completed then order again-->
+		<form th:if="${order.paymentStatus == 'paid' && order.orderStatus == 'Completed'}"
+		              th:action="@{/customer/getAllMenuItem}" method="get">
+		            <button type="submit" class="btn btn-primary">Order again</button>
+		        </form>
+    </div>
 </body>
 </html>

@@ -18,7 +18,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="orders_tbl")
 public class Orders {
-    @Id
+    
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO) 
     private Long orderId;
 
@@ -27,8 +28,11 @@ public class Orders {
 
     private Double totalAmount;
     private LocalDateTime orderDate;
+    private String paymentStatus; // Field to store the order status
+    private String orderStatus; // Field to store the payment status
+
     
-    @ManyToOne
+	@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
@@ -37,6 +41,22 @@ public class Orders {
     private CafeTables table; // Optional: associate order with a table
 
 
+    public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	
     public Long getOrderId() {
 		return orderId;
 	}

@@ -22,16 +22,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     private HttpSession httpSession;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Fetch the user by email
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // Store the Users entity in the session
-        httpSession.setAttribute("loggedInUser", user);
 
-        // Return Spring Security's UserDetails object
+        // Build and return Spring Security's UserDetails object
         return User.withUsername(user.getEmail())
                    .password(user.getPassword())
                    .roles(user.getRole().name()) // Assuming roles are enum values
