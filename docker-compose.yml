@@ -9,10 +9,10 @@ services:
     environment:
       POSTGRES_USER: cafemanagement
       POSTGRES_PASSWORD: cafemanagement
-      POSTGRES_DB: cafemanagement  # This automatically creates the database
+      POSTGRES_DB: cafemanagement
     volumes:
       - db_data:/var/lib/postgresql/data
-    restart: always  # Optional: ensure the database starts if it stops
+    restart: always
 
   app:
     image: cafemanagement:latest
@@ -27,9 +27,10 @@ services:
       SPRING_DATASOURCE_USERNAME: cafemanagement
       SPRING_DATASOURCE_PASSWORD: cafemanagement
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - db
-    restart: always  # Optional: ensure the app starts after the db
+    restart: always
 
 volumes:
   db_data:
